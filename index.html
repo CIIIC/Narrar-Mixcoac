@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Narrar Mixcoac · Curso Introductorio para Profesores (Geografía · ENP 1405 · Unidad 2)</title>
+  <meta name="description" content="Curso introductorio para profesores: mapa narrativo con Google Earth, trazado de rutas y registro de voz aplicado al territorio de Mixcoac. Programa, materiales y guía paso a paso." />
+  <style>
+    /* UNAM Blue & Gold palette */
+    :root{
+      --unam-blue:#0033A0;    /* Azul UNAM */
+      --unam-blue-2:#0a3fb5;  /* shade */
+      --unam-gold:#FFC72C;    /* Oro UNAM */
+      --bg:#0b1024;           /* deep blue background */
+      --panel:#0f1a3a;        /* panels */
+      --muted:#c7d2fe;        /* light indigo for text-muted */
+      --text:#f8fafc;         /* near white */
+      --brand:var(--unam-gold);
+      --brand-2:#ffd85e;
+      --ok:#22c55e;
+      --warn:#f59e0b;
+      --card:#0a1330;
+      --border:#1e2a55;
+      --band:var(--unam-blue);
+      --band2:#001e5a;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
+    a{color:var(--brand)} a:hover{color:#ffe38a}
+    .container{max-width:1100px;margin-inline:auto;padding:24px}
+    header{position:sticky;top:0;z-index:60}
+    .band{background:linear-gradient(90deg,var(--band),var(--band2));border-bottom:2px solid var(--unam-gold)}
+    .band .container{display:flex;gap:16px;align-items:center;padding:12px 24px}
+    .logos-left{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .logo{height:48px;width:auto;border-radius:6px;background:#001845;border:1px solid #002266;padding:6px}
+    .titlewrap{display:flex;flex-direction:column;gap:2px}
+    .brand{font-weight:900;letter-spacing:.2px;color:var(--unam-gold);text-transform:uppercase}
+    .subtitle{font-size:.95rem;color:#e5edff}
+    .navline{background:linear-gradient(180deg,rgba(0,25,80,.95),rgba(0,25,80,.85));backdrop-filter:saturate(140%) blur(8px);border-bottom:1px solid var(--border)}
+    nav{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .chip{padding:.25rem .6rem;border:1px solid var(--border);border-radius:999px;color:#dbeafe;font-size:.9rem;background:#0b1b4a}
+    .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:center;margin-top:18px}
+    .hero h1{font-size:clamp(1.6rem,2.6vw,2.4rem);line-height:1.2;margin:.3rem 0}
+    .hero p{color:#e2e8f0}
+    .panel{background:linear-gradient(180deg,rgba(10,19,48,.92),rgba(6,14,36,.94));border:1px solid var(--border);border-radius:18px;padding:20px}
+    .cta{display:inline-block;background:linear-gradient(90deg,var(--unam-gold),#ffd86b);color:#001a49;font-weight:900;padding:.8rem 1rem;border-radius:12px;text-decoration:none;border:1px solid #eab308}
+    .grid{display:grid;gap:16px}
+    .grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    @media (max-width:920px){.hero{grid-template-columns:1fr}.grid.cols-3,.grid.cols-2{grid-template-columns:1fr}}
+    h2{margin:28px 0 12px 0;font-size:1.4rem}
+    h3{margin:16px 0 8px 0;font-size:1.1rem;color:var(--unam-gold)}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
+    .tag{display:inline-block;margin:.15rem .35rem .15rem 0;padding:.15rem .5rem;border:1px solid var(--border);border-radius:8px;color:#e5edff;font-size:.85rem;background:#0b1b4a}
+    .kbd{border:1px solid var(--border);border-bottom-width:3px;border-radius:8px;padding:.25rem .5rem;background:#09163a;color:#fff;font-weight:700}
+    .table{width:100%;border-collapse:separate;border-spacing:0}
+    .table th,.table td{border-bottom:1px solid var(--border);padding:10px 8px;vertical-align:top}
+    .table th{color:#ffe38a;text-align:left;background:#0a1c4a;position:sticky;top:48px}
+    .notice{border-left:4px solid var(--unam-gold);padding:12px 14px;background:rgba(255,199,44,.08);border-radius:10px}
+    .accordion{border:1px solid var(--border);border-radius:14px;overflow:hidden}
+    .acc-item+.acc-item{border-top:1px solid var(--border)}
+    .acc-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:#0c1f55;cursor:pointer}
+    .acc-head h4{margin:0;font-size:1rem}
+    .acc-body{padding:14px 16px;display:none;background:#0a173f}
+    .acc-item.active .acc-body{display:block}
+    footer{margin:32px 0 16px;color:#c7d2fe;text-align:center}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:.4rem .65rem;border:1px solid var(--border);border-radius:999px;background:#0b1b4a}
+    .dot{width:8px;height:8px;border-radius:999px;background:#22c55e}
+    .warn .dot{background:#f59e0b}
+    .idform label{display:block;margin:.25rem 0 .15rem;color:#e5edff}
+    .idform input{width:100%;padding:.55rem .7rem;border:1px solid var(--border);border-radius:10px;background:#0a173f;color:#fff}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:760px){.row{grid-template-columns:1fr}}
+    .btn{display:inline-block;border:1px solid #eab308;padding:.6rem .9rem;border-radius:10px;background:linear-gradient(90deg,#ffd159,#ffc72c);color:#001a49;text-decoration:none;cursor:pointer;font-weight:800}
+    .small{font-size:.9rem;color:#c7d2fe}
+  </style>
+</head>
+<body>
+  <header>
+    <!-- Institutional band with left-aligned logos and title -->
+    <div class="band">
+      <div class="container">
+        <div class="logos-left">
+          <img class="logo" src="data:image/png;base64,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" alt="ENP/UNAM" />
+          <img class="logo" src="data:image/png;base64,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" alt="UPN" />
+        </div>
+        <div class="titlewrap">
+          <div class="brand">Narrar Mixcoac</div>
+          <div class="subtitle">Curso introductorio para profesores · Geografía ENP (Unidad 2)</div>
+        </div>
+      </div>
+    </div>
+    <div class="navline">
+      <div class="container">
+        <nav>
+          <div class="chip" id="profDisplay">Profesor/a: —</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span class="chip">Google Earth</span>
+            <span class="chip">Rutas (KML/KMZ)</span>
+            <span class="chip">Audio</span>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Personalización e inicio -->
+    <section id="identidad" class="panel">
+      <h2 style="margin-top:0">Identifícate para personalizar tu curso</h2>
+      <p class="small">Tu nombre se mostrará en la cabecera y se usará para generar el <strong>reporte .txt</strong>. (Se guarda localmente en tu navegador).</p>
+      <div class="idform">
+        <div class="row">
+          <div>
+            <label for="profesor">Nombre completo del/la profesor/a</label>
+            <input id="profesor" placeholder="Ej. María Pérez / José Luis Herrera" />
+          </div>
+          <div>
+            <label for="centro">Centro / Escuela</label>
+            <input id="centro" placeholder="Ej. ENP 8 Miguel E. Schulz / Sistema Incorporado" />
+          </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <div>
+            <label for="correo">Correo (opcional)</label>
+            <input id="correo" placeholder="Ej. usuario@dominio.edu.mx" />
+          </div>
+          <div style="display:flex;align-items:end;gap:10px">
+            <button class="btn" id="guardarId">Guardar</button>
+            <span class="small" id="saveStatus"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero">
+      <div>
+        <h1>Geonarrativas para leer la desigualdad educativa en <em>Mixcoac</em></h1>
+        <p><strong>Objetivo del curso (enfoque constructivista, vinculado a la Unidad 2: “Población en un mundo diverso y desigual”):</strong><br/>
+        Favorecer en las y los docentes la construcción de saberes geográficos mediante la reflexión, la exploración territorial y la práctica situada en el entorno de Mixcoac. El curso promueve la comprensión crítica de la estructura, movilidad y distribución de la población en el marco de la Unidad 2: “Población en un mundo diverso y desigual” del plan de estudios de Geografía. Desde un enfoque constructivista y colaborativo, se busca que los participantes diseñen experiencias de aprendizaje que integren el uso de herramientas digitales —Google Earth, MapIt GIS/Komoot y grabación de voz móvil— para fomentar en el aula la observación, la problematización y la interpretación activa del espacio, reconociendo su dimensión social, histórica y educativa.
+        </p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px">
+          <a class="cta" href="#sesiones">Comenzar el curso</a>
+          <a class="pill warn" href="#recursos"><span class="dot"></span>Guía rápida de apps</a>
+        </div>
+      </div>
+      <div class="panel">
+        <h3 style="margin-top:0">Datos generales</h3>
+        <div class="grid cols-3" style="margin-top:10px">
+          <div class="card"><strong>Duración:</strong><br/>5 sesiones · 3 h c/u (15 h)</div>
+          <div class="card"><strong>Territorio:</strong><br/>Mixcoac (CDMX)</div>
+          <div class="card"><strong>Productos:</strong><br/>Marcadores, ruta KML/KMZ, mapa narrativo con audio</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="alineacion">
+      <h2>Vinculación con el programa oficial (ENP 1405 · Unidad 2)</h2>
+      <div class="card">
+        <p style="margin:0">Se trabajan directamente los contenidos <strong>2.1 Estructura y evolución / movilidad</strong>,
+        <strong>2.2 Contrastes urbano–rural</strong>, <strong>2.3 Diversidad y patrimonio cultural</strong> y los procedimentales <strong>2.4–2.7</strong>
+        (localización de concentración/dispersión, análisis de estadísticas, interpretación cartográfica y elaboración de textos).
+        </p>
+        <div style="margin-top:8px">
+          <span class="tag">Población</span>
+          <span class="tag">Movilidad</span>
+          <span class="tag">Desigualdad</span>
+          <span class="tag">Interculturalidad</span>
+          <span class="tag">SIG básicos</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="sesiones">
+      <h2>Plan de sesiones (paso a paso)</h2>
+      <div class="accordion">
+        <div class="acc-item active">
+          <div class="acc-head"><h4>Sesión 1 · Mixcoac: territorio, memoria y escuelas</h4><span>▼</span></div>
+          <div class="acc-body">
+            <p><strong>Meta:</strong> reconocer Mixcoac como territorio educador y preparar el <em>Project</em> de Google Earth.</p>
+            <ul>
+              <li><label><input type="checkbox" class="prog"> Crear un <span class="kbd">Proyecto</span> en <a href="https://earth.google.com/web/" target="_blank" rel="noopener">Google Earth Web</a>.</label></li>
+              <li><label><input type="checkbox" class="prog"> Agregar marcadores: ENP 8, Parque San Lorenzo, Ex Convento, Metro Mixcoac, etc.</label></li>
+              <li><label><input type="checkbox" class="prog"> Escribir notas breves (historia, uso, seguridad, apropiación estudiantil).</label></li>
+            </ul>
+            <p><strong>Producto:</strong> Mapa base con ≥ 6 marcadores categorizados.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-head"><h4>Sesión 2 · Trazado de rutas educativas (accesibilidad y barreras)</h4><span>▼</span></div>
+          <div class="acc-body">
+            <p><strong>Meta:</strong> registrar rutas reales o simuladas y exportarlas como KML/KMZ.</p>
+            <ol>
+              <li><label><input type="checkbox" class="prog"> Instalar <strong>MapIt GIS</strong> (Android) o <strong>Komoot</strong> (iOS/Android).</label></li>
+              <li><label><input type="checkbox" class="prog"> Grabar ruta ENP 8 ↔ punto de interés y exportar <span class="kbd">.kml/.kmz</span>.</label></li>
+              <li><label><input type="checkbox" class="prog"> Importar la ruta al <em>Project</em> y describir barreras.</label></li>
+            </ol>
+            <p><strong>Producto:</strong> Capa de ruta con puntos de observación y descriptores.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-head"><h4>Sesión 3 · La voz del territorio (registro sonoro)</h4><span>▼</span></div>
+          <div class="acc-body">
+            <p><strong>Meta:</strong> incorporar testimonios o descripciones orales breves y vincularlos a marcadores.</p>
+            <ol>
+              <li><label><input type="checkbox" class="prog"> Instalar app de grabación (Android/iOS).</label></li>
+              <li><label><input type="checkbox" class="prog"> Grabar 60–120 s sobre la experiencia educativa en sitio.</label></li>
+              <li><label><input type="checkbox" class="prog"> Subir el audio a Drive y enlazarlo al marcador.</label></li>
+            </ol>
+            <p class="notice"><strong>Ética:</strong> si se graban voces de terceros, solicitar consentimiento informado y evitar datos personales.</p>
+            <p><strong>Producto:</strong> ≥ 2 marcadores con audio embebido o enlazado.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-head"><h4>Sesión 4 · Ensamblar el mapa narrativo</h4><span>▼</span></div>
+          <div class="acc-body">
+            <p><strong>Meta:</strong> estructurar la historia en 3–4 escenas: <em>Memoria – Movilidad – Desigualdad – Propuestas</em>.</p>
+            <ul>
+              <li><label><input type="checkbox" class="prog"> Ordenar escenas en el <em>Project</em> y habilitar <em>Present</em>.</label></li>
+              <li><label><input type="checkbox" class="prog"> Insertar imágenes y leyendas claras.</label></li>
+              <li><label><input type="checkbox" class="prog"> Verificar rutas, audios y descripciones.</label></li>
+            </ul>
+            <p><strong>Producto:</strong> Versión beta del mapa narrativo “Mixcoac educativo”.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-head"><h4>Sesión 5 · Presentación y evaluación</h4><span>▼</span></div>
+          <div class="acc-body">
+            <p><strong>Meta:</strong> socializar productos y reflexionar sobre su uso didáctico en la Unidad 2.</p>
+            <ul>
+              <li><label><input type="checkbox" class="prog"> Presentar el recorrido (5–7 min).</label></li>
+              <li><label><input type="checkbox" class="prog"> Completar la ficha didáctica y checklist final.</label></li>
+            </ul>
+            <p><strong>Producto:</strong> Mapa narrativo final y ficha didáctica de aplicación en clase.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="evaluacion">
+      <h2>Rúbrica de evaluación</h2>
+      <div class="card">
+        <table class="table" role="table">
+          <thead>
+            <tr><th>Criterio</th><th>Excelente</th><th>Satisfactorio</th><th>En proceso</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Comprensión territorial</td>
+              <td>Relaciona población, movilidad, diversidad e infraestructura con evidencias locales.</td>
+              <td>Relaciona 2 dimensiones con ejemplos.</td>
+              <td>Descripciones generales sin evidencias.</td>
+            </tr>
+            <tr>
+              <td>Mapa en Google Earth</td>
+              <td>≥ 6 marcadores con notas, imágenes y audio; escenas ordenadas.</td>
+              <td>4–5 marcadores con notas básicas; escenas mínimas.</td>
+              <td>≤ 3 marcadores; sin narrativa.</td>
+            </tr>
+            <tr>
+              <td>Ruta KML/KMZ</td>
+              <td>Ruta + puntos críticos descritos; barreras y tiempos estimados.</td>
+              <td>Ruta sin análisis completo.</td>
+              <td>Sin ruta o sin exportación.</td>
+            </tr>
+            <tr>
+              <td>Audio</td>
+              <td>≥ 2 clips claros, pertinentes y bien integrados al mapa.</td>
+              <td>1 clip o integración parcial.</td>
+              <td>Sin audio o inaudible.</td>
+            </tr>
+            <tr>
+              <td>Aplicación didáctica</td>
+              <td>Ficha con objetivos, actividades, evaluación y seguridad.</td>
+              <td>Ficha con objetivos y actividad.</td>
+              <td>Sin ficha o incompleta.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="recursos">
+      <h2>Guía rápida de herramientas</h2>
+      <div class="grid cols-3">
+        <div class="card">
+          <h3>Google Earth Web</h3>
+          <p>Crear <em>Projects</em>, marcadores, escenas y presentar el recorrido.</p>
+          <ul>
+            <li>Ir a <a href="https://earth.google.com/web/" target="_blank" rel="noopener">earth.google.com/web</a></li>
+            <li>Menú → <strong>Projects</strong> → <strong>New Project</strong></li>
+            <li>Compartir con enlace (solo lectura o edición)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Rutas (KML/KMZ)</h3>
+          <p><strong>MapIt GIS</strong> (Android) o <strong>Komoot</strong> (iOS/Android) para grabar y exportar rutas.</p>
+          <ul>
+            <li>Grabar recorrido → Exportar <span class="kbd">.kml/.kmz</span></li>
+            <li>Importar al Project de Google Earth</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Grabación de voz</h3>
+          <p><strong>Easy Voice Recorder</strong> (Android) / <strong>Voice Recorder & Audio Editor</strong> (iOS).</p>
+          <ul>
+            <li>Grabar 60–120 s (formato <span class="kbd">.m4a</span> o <span class="kbd">.mp3</span>)</li>
+            <li>Subir a Drive y enlazar en el marcador</li>
+          </ul>
+        </div>
+      </div>
+      <div class="notice" style="margin-top:14px">
+        <strong>Privacidad y seguridad:</strong> evita rostros identificables en fotos, omite datos personales en las notas y 
+        solicita consentimiento si incluyes voces de terceros.
+      </div>
+    </section>
+
+    <section id="descargas">
+      <h2>Plantillas y checklist</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Checklist de producto final</h3>
+          <ul>
+            <li><label><input type="checkbox" class="prog"> 6–8 marcadores con notas y categorías</label></li>
+            <li><label><input type="checkbox" class="prog"> 1 ruta .kml/.kmz integrada</label></li>
+            <li><label><input type="checkbox" class="prog"> 2 audios vinculados a marcadores</label></li>
+            <li><label><input type="checkbox" class="prog"> 3–4 escenas ordenadas (Present)</label></li>
+            <li><label><input type="checkbox" class="prog"> Ficha didáctica de aplicación en clase</label></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Estructura sugerida de escenas</h3>
+          <ol>
+            <li><strong>Memoria:</strong> sitio histórico y su vínculo educativo</li>
+            <li><strong>Movilidad:</strong> ruta y barreras</li>
+            <li><strong>Diversidad:</strong> prácticas, patrimonio y convivencia</li>
+            <li><strong>Propuestas:</strong> mejora del entorno escolar</li>
+          </ol>
+        </div>
+      </div>
+      <div class="panel" style="margin-top:12px">
+        <h3 style="margin-top:0">Generar y descargar reporte (.txt)</h3>
+        <p class="small">Incluye tu nombre, centro, fecha/hora, progreso (tareas completadas) y datos técnicos mínimos (navegador). El archivo se guarda localmente.</p>
+        <button class="btn" id="genTxt">Descargar reporte .txt</button>
+        <span class="small" id="genStatus"></span>
+      </div>
+    </section>
+
+
+    <section id="manual">
+      <h2>Manual rápido (PDF)</h2>
+      <div class="card">
+        <p>Paso a paso con capturas y rúbrica resumida para implementar el curso y elaborar el mapa narrativo en Google Earth.</p>
+        <a class="btn" href="manual-narrar-mixcoac.pdf" download>Descargar Manual PDF</a>
+      </div>
+    </section>
+
+    <section id="faq">
+      <h2>Preguntas frecuentes</h2>
+      <div class="accordion">
+        <div class="acc-item">
+          <div class="acc-head"><h4>¿Necesito instalar algo en computadora?</h4><span>▼</span></div>
+          <div class="acc-body">No: Google Earth Web funciona en navegador moderno (Chrome/Edge). Para rutas y voz sí se recomiendan apps móviles.</div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-head"><h4>¿Cómo comparto mi mapa narrativo?</h4><span>▼</span></div>
+          <div class="acc-body">En Google Earth → <em>Projects</em> → <em>Share</em> → generar enlace. Puedes fijar permisos de solo lectura o edición.</div>
+        </div>
+        <div class="acc-item">
+          <div class="acc-head"><h4>¿Y si no puedo grabar la ruta en campo?</h4><span>▼</span></div>
+          <div class="acc-body">Puedes trazarla manualmente en Google Earth (medir línea), guardar como KML y añadir observaciones con Street View.</div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>Curso: Narrar Mixcoac · Geografía ENP (Unidad 2). Desarrollado para uso docente.</p>
+    </footer>
+  </main>
+
+  <script>
+    // Simple accordion
+    document.querySelectorAll('.acc-head').forEach(function(h){
+      h.addEventListener('click',function(){
+        h.parentElement.classList.toggle('active');
+      })
+    });
+
+    // Personalización con localStorage
+    const profInput = document.getElementById('profesor');
+    const centroInput = document.getElementById('centro');
+    const correoInput = document.getElementById('correo');
+    const guardarBtn = document.getElementById('guardarId');
+    const profDisplay = document.getElementById('profDisplay');
+    const saveStatus = document.getElementById('saveStatus');
+
+    function loadIdentity(){
+      const data = JSON.parse(localStorage.getItem('mixcoac_id') || '{}');
+      if(data.prof){ profInput.value = data.prof; profDisplay.textContent = 'Profesor/a: ' + data.prof; }
+      if(data.centro){ centroInput.value = data.centro; }
+      if(data.correo){ correoInput.value = data.correo; }
+    }
+    loadIdentity();
+
+    guardarBtn.addEventListener('click', function(){
+      const data = {prof: profInput.value.trim(), centro: centroInput.value.trim(), correo: correoInput.value.trim()};
+      localStorage.setItem('mixcoac_id', JSON.stringify(data));
+      profDisplay.textContent = 'Profesor/a: ' + (data.prof || '—');
+      saveStatus.textContent = 'Guardado ✓';
+      setTimeout(function(){ saveStatus.textContent = ''; }, 2000);
+    });
+
+    // Progreso → generar reporte TXT
+    function getProgressSummary(){
+      const checks = Array.from(document.querySelectorAll('input.prog'));
+      const total = checks.length;
+      const done = checks.filter(c=>c.checked).length;
+      const items = checks.filter(c=>c.checked).slice(0,20).map(function(c){
+        const label = c.parentElement.textContent.trim().replace(/\\s+/g,' ');
+        return '- ' + label;
+      }).join('\\n');
+      return {total: total, done: done, items: items};
+    }
+
+    function download(filename, text) {
+      const element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+      element.setAttribute('download', filename);
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+
+    document.getElementById('genTxt').addEventListener('click', function(){
+      const id = JSON.parse(localStorage.getItem('mixcoac_id') || '{}');
+      const now = new Date();
+      const prog = getProgressSummary();
+      const ua = navigator.userAgent;
+      const lines = [
+        'REPORTE DE PARTICIPACIÓN · CURSO NARRAR MIXCOAC',
+        'Fecha y hora: ' + now.toLocaleString(),
+        'Profesor/a: ' + (id.prof || ''),
+        'Centro/Escuela: ' + (id.centro || ''),
+        'Correo: ' + (id.correo || ''),
+        '',
+        'Progreso: ' + prog.done + ' de ' + prog.total + ' tareas marcadas',
+        'Tareas (máx. 20 listadas):',
+        prog.items || '(Sin tareas marcadas)',
+        '',
+        'Datos técnicos: ' + ua,
+        'Observaciones: ',
+        ''
+      ].join('\\n');
+      const filename = 'reporte_mixcoac_' + (id.prof ? id.prof.replace(/\\s+/g,'_') : 'docente') + '.txt';
+      download(filename, lines);
+      const st = document.getElementById('genStatus');
+      st.textContent = 'Reporte descargado ✓';
+      setTimeout(function(){ st.textContent = ''; }, 2500);
+    });
+  </script>
+</body>
+</html>
